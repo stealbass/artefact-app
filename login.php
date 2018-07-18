@@ -41,7 +41,7 @@
 									<input type="password" name="password" class="form-control"/>
 								</div>
 								<div class="form-group">
-									<input type="submit" name="btnRegister" class="btn amado-btn active" value="Register"/>
+									<input type="submit" name="btnRegister" class="btn btn-block btn-warning" value="Register"/>
 								</div>
 							</form>
     						</div>
@@ -57,7 +57,7 @@
 									<input type="password" name="password" class="form-control"/>
 								</div>
 								<div class="form-group">
-									<input type="submit" name="btnLogin" class="btn amado-btn active" value="Connection"/>
+									<input type="submit" name="btnLogin" class="btn btn-block btn-warning" value="Connection"/>
     								<div class="form-group" id="alert-msg1">
     								</div>
     							</form>

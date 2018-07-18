@@ -129,7 +129,7 @@ foreach ($_SESSION['cart'] as $delivery) {
 
                             <div class="box-footer">
                                 <div class="pull-left">
-                                            <a href="update-cart.php?action=empty" class="btn btn-success active"> Empty card</a>
+                                            <a href="update-cart.php?action=empty" class="btn btn-success"> Empty card</a>
                                 </div>
 									<?php
 									if(isset($_SESSION['user_id'])){

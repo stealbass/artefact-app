@@ -11,6 +11,7 @@
     <!-- Page-Level Plugin Scripts-->
     <script src="assets/plugins/dataTables/jquery.dataTables.js"></script>
     <script src="assets/plugins/dataTables/dataTables.bootstrap.js"></script>
+    <script type="text/javascript" src="//platform-api.sharethis.com/js/sharethis.js#property=5995aabece46330012f5f6f2&product=inline-share-buttons"></script>
     <script>
         $(document).ready(function () {
             $('#dataTables-example').dataTable();

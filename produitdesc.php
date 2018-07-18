@@ -1,8 +1,22 @@
 <?php
+//if (session_status() !== PHP_SESSION_ACTIVE) {session_start();}
+if(session_id() == '' || !isset($_SESSION)){
+	session_start();
+
+            $_SESSION['start'] = time(); // Taking now logged in time.
+            // Ending a session in 24 hours from the starting time.
+            $_SESSION['expire'] = $_SESSION['start'] + (24 * 3600);
+
+        $now = time(); // Checking the time now when home page starts.
+
+        if ($now > $_SESSION['expire']) {
+            
+    header("Location: index.php");
+        }}
 require("dbcon.php");
 if(isset($_GET['id'], $_GET['cont']))
         {	
-$stmt=$db->prepare('select tbl_produits.prodID, tbl_produits.downcat_id, tbl_produits.prodBrand, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodDesc, tbl_produits.prodImg, tbl_produits.prodGel, tbl_produits.prodDeo, tbl_produits.prodLait, tbl_produits.prodPrice, tbl_produits.prodDiscount, tbl_produits.prodAmount, tbl_downsub.downcat_id, tbl_downsub.downcat_name, tbl_downsub.catSlug, tbl_downsub.Photo FROM tbl_produits, tbl_downsub WHERE tbl_produits.downcat_id = tbl_downsub.downcat_id 
+$stmt=$db->prepare('select tbl_produits.prodID, tbl_produits.subcat_id, tbl_produits.prodBrand, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodDesc, tbl_produits.prodImg, tbl_produits.prodPrice, tbl_submain.subcat_id, tbl_submain.subcat_name, tbl_submain.subcatSlug, tbl_submain.cat_id FROM tbl_produits, tbl_submain WHERE tbl_produits.subcat_id = tbl_submain.subcat_id 
                      AND tbl_produits.prodSlug = :prodSlug AND tbl_produits.prodCont = :prodCont ORDER BY 
                     prodID DESC');
 								$stmt->execute(array(':prodSlug' => $_GET['id'], ':prodCont' => $_GET['cont']));
@@ -22,21 +36,22 @@ $pid=$row['prodID'];
                                 <table class="table table-hover">
                                     <tbody>
                                         <tr>
-                    					  <td width="100"><img class="img-rounded" src="admin/<?php echo $row['prodImg']; ?>" width="100"></td>
+                    					  <td width="100"><img class="img img-responsive" src="admin/<?php echo $row['prodImg']; ?>" width="100"></td>
                     					  
                     					  <td>
-                                            <td width="100">
+                                            <td>
                 							<?php
                 										echo '<h4>'.$row['prodBrand'].' '.$row['prodTitle'].'</h4>';
                                                 ?>
-                                            <p class="text-muted">Aventure</p>
+                                            <p class="text-muted"><?php echo $row['subcatSlug'] ?></p>
                                             <p>By Bibi Benzo</p>
                                             <button type="button" class="btn btn-danger btn-circle">-18
                                             </button>
 															<?php
-																echo '<a href="update-cart.php?action=add&id='.$pid.'"><input type="submit" value="Buy" style="clear:both; background: #f0ad4e; border: 1px solid #eea236; border-radius: 3px; color: #fff; font-size: 1em; padding: 5px; font-weight: 400; text-transform: uppercase; text-align: center;"/></a>';
+																echo '<a href="update-cart.php?action=add&id='.$pid.'"><input type="submit" value="'.$row['prodPrice'].' XAF" style="clear:both; background: #ffd400; border: 1px solid #000000; border-radius: 3px; color: #000; font-size: 0.9em; font-weight: 700; padding: 5px; text-transform: uppercase; text-align: center;"/></a>';
 																
 															?>
+							                 <p class="text-muted"><div class="sharethis-inline-share-buttons"></div></p>
                                                             </td>
                                         </tr>
                                     </tbody>
@@ -75,16 +90,17 @@ $pid=$row['prodID'];
 									<textarea class="form-control" name="cmt" placeholder="Comment..."></textarea>
 								</div>
 
-								<div class="form-group">
-									<input class="form-control" type="text" name="name" placeholder="Name *">
-								</div>
-
-								<div class="form-group">
-									<input class="form-control" type="text" name="email" placeholder="Email *">
-								</div>
-
     								<div class="form-group">
+									<?php
+									if(isset($_SESSION['user_id'])){
+									?>	
     									<button class="btn btn-block btn-warning" id = "btn" name = "post">Post</button>
+                                    <?php
+									}
+									  else {
+										echo '<a href="#" data-toggle="modal" data-target="#login-modal"  class="btn btn-block btn-warning">Connexion</a>';
+									  }
+									?>
     								</div>
 							</form>
 						</div>
@@ -92,14 +108,14 @@ $pid=$row['prodID'];
                                 <div class="tab-pane fade" id="messages">
                                     <h4>Read also</h4>
                     <div class="panel panel-default">
-                            <div class="table-responsive">
+                            <div class="">
                                 <table class="table table-hover">
                                     <tbody>
                         			<?php
-                        							  $query=$db->prepare('select tbl_produits.prodID, tbl_produits.prodBrand, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodImg, tbl_produits.prodPrice, tbl_produits.prodDiscount, tbl_produits.prodAmount FROM tbl_produits, tbl_downsub WHERE tbl_produits.downcat_id = tbl_downsub.downcat_id 
-                                             AND tbl_downsub.downcat_id = :downcat_id ORDER BY 
+                        							  $query=$db->prepare('select tbl_produits.prodID, tbl_produits.subcat_id, tbl_produits.prodBrand, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodImg, tbl_produits.prodPrice, tbl_submain.subcat_id, tbl_submain.subcat_name, tbl_submain.subcatSlug, tbl_submain.cat_id FROM tbl_produits, tbl_submain WHERE tbl_produits.subcat_id = tbl_submain.subcat_id 
+                                             AND tbl_submain.subcat_id  = :subcat_id ORDER BY 
                                             RAND()	LIMIT 3');
-                        								$query->execute(array(':downcat_id' => $row['downcat_id']));
+                        								$query->execute(array(':subcat_id' => $row['subcat_id']));
                         								?>
                         								<?php
                         										while($row = $query->fetch()){
@@ -108,23 +124,25 @@ $pid=$row['prodID'];
                         													$pid=$row['prodID'];
                         							?>
                                         <tr>
-                                            <td width="100">
+                                            <td>
             								<?php
-            										echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'" class="img-rounded"><img class="img-rounded" src="admin/'.$row['prodImg'].'" width="100">';
+            										echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><img class="img-rounded" src="admin/'.$row['prodImg'].'" width="100">';
                                             ?>
                                             </td>
-                                            <td width="100">
+                                            <td>
+                                            <div class="single_product_desc">
             								<?php
             										echo '<h4 itemprop="name"><a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><strong>'.$row['prodBrand'].'</strong><br/> '.$row['prodTitle'].' '.$row['prodCont'].'</a></h4>';
                                             ?>
-                                            <p class="text-muted">Humour</p>
+                                            <p class="text-muted"><?php echo $row['subcatSlug'] ?></p>
                                             <p>By Mandresak</p>
                                             <button type="button" class="btn btn-danger btn-circle">-18
                                             </button>
 															<?php
-																echo '<a href="update-cart.php?action=add&id='.$pid.'"><input type="submit" value="Buy" style="clear:both; background: #f0ad4e; border: 1px solid #eea236; border-radius: 3px; color: #fff; font-size: 1em; padding: 5px; font-weight: 400; text-transform: uppercase; text-align: center;"/></a>';
+																echo '<a href="update-cart.php?action=add&id='.$pid.'"><input type="submit" value="'.$row['prodPrice'].' XAF" style="clear:both; background: #ffd400; border: 1px solid #000000; border-radius: 3px; color: #000; font-size: 0.9em; font-weight: 700; padding: 5px; text-transform: uppercase; text-align: center;"/></a>';
 																
 															?>
+                                             </div>               
                                             </td>
                         					  <?php } 							
                         				?>

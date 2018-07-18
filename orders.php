@@ -100,7 +100,7 @@ $obj = $result->fetch();
                                             </td>
                                             <td>
 											<?php
-												echo '<p id="deposez"><a href="#" class="btn" data-toggle="modal" data-target="#view-modal'.$id.'" ><i class="fa fa-search"></i>Preview</a></p>';
+												echo '<p id="deposez"><a itemprop="url" href="downloadproduct.php?id='.$id.'&cont='.$sid.'" class="btn btn-default" ><i class="fa fa-search"></i>Preview</a></p>';
 											?>
 											<div class="modal fade" id="view-modal<?php echo $id; ?>" tabindex="-1" role="dialog" aria-labelledby="Login" aria-hidden="true">
 														<div class="modal-dialog">

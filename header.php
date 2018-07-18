@@ -153,7 +153,7 @@ require("dbcon.php");
                     <li class="sidebar-search">
                         <!-- search section-->
                         <form class="input-group custom-search-form" role="search" action="search.php" method="GET">
-                            <input type="text" class="form-control" name="name" placeholder="Search...">
+                            <input type="text" class="form-control" name="name">
                             <span class="input-group-btn">
                                 <button type="submit" name="submit" class="btn btn-default" type="button">
                                     <i class="fa fa-search"></i>
@@ -163,7 +163,10 @@ require("dbcon.php");
                         <!--end search section-->
                     </li>
                     <li class="selected">
-                        <a href="index.php"><i class="fa fa-book fa-fw"></i>Series</a>
+                        <a href="subcatproduct.php?id=#"><i class="fa fa-book fa-fw"></i>Series</a>
+                    </li>
+                    <li class="selected">
+                        <a href="index.php"><i class="fa fa-book fa-fw"></i>Strip</a>
                     </li>
 				<?php
 					$res=$db->query("SELECT * FROM tbl_main");
