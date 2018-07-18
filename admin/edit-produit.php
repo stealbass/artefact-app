@@ -146,6 +146,8 @@ $(document).ready(function()
   
 
     <div class="control-group">
+    
+    <label class="control-label" for="inputEmail">Title</label>
 
     <div class="controls">
 
@@ -157,23 +159,14 @@ $(document).ready(function()
 
     </div>
 
-  <div class="control-group">
 
-    <label class="control-label" for="inputEmail">Brand</label>
+  <div class="control-group">
+  
+    <label class="control-label" for="inputEmail">Genre</label>
 
     <div class="controls">
 
-      <input type="text" class="span10" id="inputEmail" name="brand" value="<?php echo $row['prodBrand']; ?>" required class="span3">
-
-    </div>
-
-  </div>
-
-  <div class="control-group">
-
-    <div class="controls">
-
-      <input value="<?php echo $row['prodCont']; ?>" type="text" id="inputEmail" name="contenance" placeholder="contenance" required class="span3">
+      <input value="<?php echo $row['prodCont']; ?>" type="text" id="inputEmail" name="contenance" placeholder="genre" required class="span3">
 
     </div>
 
@@ -215,117 +208,6 @@ $(document).ready(function()
 
   </div>
 
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Réduction</label>
-
-    <div class="controls">
-
-      <input type="number" id="inputEmail" name="discount" value="0" placeholder="" required class="span3">
-
-    </div>
-
-  </div>
-  
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Date d'Expiration Réduction</label>
-
-    <div class="controls">
-
-      <input type="date" id="Date" name="discountdate" value="<?php echo $row['prodDiscdate']; ?>" placeholder="" class="span3">
-
-    </div>
-
-  </div>
-
-
-	
-
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Gel</label>
-
-    <div class="controls">
-
-	 <input type="radio" class="radio-inline" id="inputEmail" name="gel" required value="1" <?php if ($row['prodGel'] == '1') { echo 'checked'; } ?> />OUI
-
-    <input type="radio" class="radio-inline" id="inputEmail" name="gel" required value="2" <?php if ($row['prodGel']== '2') { echo 'checked'; } ?> />NON
-
-    </div>
-
-  </div>
-
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Deo</label>
-
-    <div class="controls">
-
-	 <input type="radio" class="radio-inline" id="inputEmail" name="deo" required value="1" <?php if ($row['prodDeo'] == '1') { echo 'checked'; } ?> />OUI
-
-    <input type="radio" class="radio-inline" id="inputEmail" name="deo" required value="2" <?php if ($row['prodDeo'] == '2') { echo 'checked'; } ?> />NON
-
-    </div>
-
-  </div>
-
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Lait</label>
-
-    <div class="controls">
-
-	 <input type="radio" class="radio-inline" id="inputEmail" name="lait" required value="1" <?php if ($row['prodLait'] == '1') { echo 'checked'; } ?> />OUI
-
-    <input type="radio" class="radio-inline" id="inputEmail" name="lait" required value="2" <?php if ($row['prodLait'] == '2') { echo 'checked'; } ?> />NON
-
-    </div>
-
-  </div>
-
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Parfum</label>
-
-    <div class="controls">
-
-	 <input type="radio" class="radio-inline" id="inputEmail" name="parf" required value="1" <?php if ($row['prodParfum'] == '1') { echo 'checked'; } ?> />OUI
-
-    <input type="radio" class="radio-inline" id="inputEmail" name="parf" required value="2" <?php if ($row['prodParfum'] == '2') { echo 'checked'; } ?> />NON
-
-    </div>
-
-  </div>
-		
-  <div class="control-group">
-
-    <label class="control-label" for="inputEmail">Savon</label>
-
-    <div class="controls">
-
-	 <input type="radio" class="radio-inline" id="inputEmail" name="sav" required value="1" <?php if ($row['prodSavon'] == '1') { echo 'checked'; } ?> />OUI
-
-    <input type="radio" class="radio-inline" id="inputEmail" name="sav" required value="2" <?php if ($row['prodSavon'] == '2') { echo 'checked'; } ?> />NON
-
-    </div>
-
-  </div>
-
-	<img src="<?php echo $row['prodImg']; ?>"  width="180"/>
-
-	<div class="control-group">
-
-      <label class="control-label" for="input01">Photo:</label>
-
-     <div class="controls">
-
-     <input type="file" name="image" required class="font"> 
-
-      </div>
-
-      </div>
-
   
 
     <div class="control-group">
@@ -350,13 +232,21 @@ $(document).ready(function()
 
 
 
-<select name="city" class="city">
-
-<option selected="selected"><?php echo $row['downcat_id']; ?></option>
-
-</select>
-
 </div>
+
+	<img src="<?php echo $row['prodImg']; ?>"  width="180"/>
+
+	<div class="control-group">
+
+      <label class="control-label" for="input01">Photo:</label>
+
+     <div class="controls">
+
+     <input type="file" name="image" required class="font"> 
+
+      </div>
+
+      </div>
 
 </div>
 
@@ -394,10 +284,6 @@ $(document).ready(function()
 
 		$subcat = $_POST['state'];
 
-		$downcat = $_POST['city'];
-
-		$brand = $_POST['brand'];
-
 		$title=$_POST['title'];
 
 		$prodSlug = slug($title);	
@@ -408,23 +294,7 @@ $(document).ready(function()
 
 		$quantity = $_POST['quantity'];
 
-		$discount = $_POST['discount'];
-		
-		$discountdate = $_POST['discountdate'];
-
 		$price = $_POST['price'];
-
-		$fffffff = $price-($discount/100*$price);
-
-		$gel = $_POST['gel'];
-
-		$deo = $_POST['deo'];
-
-		$lait = $_POST['lait'];
-		
-		$parfum = $_POST['parf'];
-		
-		$savon = $_POST['sav'];
 
 		$actif = $_POST['actif'];
 		
@@ -443,13 +313,19 @@ $(document).ready(function()
 
 
 
+			try {
 	
 
-	$query = $conn->query("update tbl_produits set cat_id = '$cat', subcat_id = '$subcat', downcat_id = '$downcat', prodBrand = '$brand', prodTitle = '$title', prodCont = '$Contenance', prodSlug = '$prodSlug', prodDesc = '$content', qty = '$quantity', prodPrice = '$price', prodDiscount = '$discount', prodDiscdate = '$discountdate', prodAmount = '$fffffff', prodGel = '$gel', prodDeo = '$deo', prodLait = '$lait', prodParfum = '$parfum', prodSavon = '$savon', prodImg='$photo', prodActif = '$actif' where prodID = '$id' ");
+	$query = $conn->query("update tbl_produits set cat_id = '$cat', subcat_id = '$subcat', prodTitle = '$title', prodCont = '$Contenance', prodSlug = '$prodSlug', prodDesc = '$content', qty = '$quantity', prodPrice = '$price', prodImg='$photo', prodActif = '$actif' where prodID = '$id' ");
 
 			
+	//redirect to index page
+				header('Location: product.php');
+				exit;
 
-	header('location:product.php');
+			} catch(PDOException $e) {
+			    echo $e->getMessage();
+			}
 
 	
 

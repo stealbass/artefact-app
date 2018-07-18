@@ -16,7 +16,7 @@ date_default_timezone_set('Africa/Lagos');
 
                 <div class="col-md-6">
 
-                    <p class="pull-left">© <strong><?php echo date("Y"); ?> Les Laboratoires Biopharma.</strong> All Rights Reserved </p>
+                    <p class="pull-left">© <strong><?php echo date("Y"); ?> Artefact.</strong> All Rights Reserved </p>
 
 
 
