@@ -22,7 +22,7 @@ limitations under the License.*/
 /* ------------------------------- */
 
  body {
-    background-color: #f8f8f8;
+    background-color: #000000;
 }
 
 /* Wrappers */
@@ -37,7 +37,7 @@ limitations under the License.*/
 
 #page-wrapper {
     padding: 0;
-    min-height: 568px;
+    min-height: 168px;
      background-color:rgb(0, 0, 0);
      color: #fff;
 }
@@ -47,7 +47,7 @@ limitations under the License.*/
     
 
 .navbar-static-side ul li {
-    border-bottom:1px solid #84B899 !important;
+    border-bottom:1px solid #ffd400 !important;
 }
 
 /* Navigation */
@@ -131,10 +131,11 @@ limitations under the License.*/
 .nav-second-level li,
 .nav-third-level li {
     border-bottom: none !important;
+    
 }
 
 .nav-second-level li a {
-    padding-left: 37px;
+    padding-left: 37px !important;
 }
 
 .nav-second-level li:hover {
@@ -337,7 +338,7 @@ table.dataTable thead .sorting:after {
 }
 .bg-artefact {
   position: absolute;
-  top: 30%;  
+  top: 20%;  
   left: 0;
   right: 0;
   margin: 0 auto;
@@ -351,6 +352,8 @@ table.dataTable thead .sorting:after {
     list-style: none;
     position: relative;
     display: block;
+    position: relative;
+    width: 60px;
     }
 .menu-selected >li > a{
     text-decoration: none;
@@ -364,8 +367,27 @@ table.dataTable thead .sorting:after {
     -webkit-border-radius: 3px;
     border-radius: 3px;
 }
-.menu-selected .bit{
-    padding: 10px 12px;
+.bit{
+    position: relative;
+    width: 200px;
+    background: #000000;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    padding: 10px 15px;
+    color: #ffd400;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    margin-top: 10px;
+    
+}
+.bit a {
+  color: #ffd400;
+    
+}
+.bit a:hover {
+  text-decoration: none;
     
 }
 .img-responsive,
@@ -384,7 +406,7 @@ table.dataTable thead .sorting:after {
     margin-top: 20px;
 }
 .carousel-inner {
-  border-radius: 15px;
+  border-radius: 0px;
 }
 
 .carousel-caption {
@@ -429,6 +451,10 @@ table.dataTable thead .sorting:after {
     visibility: hidden;
     display: none;
 }
+.bit{
+    position: relative;
+    left: 10%; 
+}
     
 }
 .table-hover h4 a {
@@ -436,4 +462,12 @@ table.dataTable thead .sorting:after {
 }
 .table-hover h4 a:hover {
   color: #fff;
+}
+.single_product_desc {
+    padding: 0 10px;
+    margin-top: -30px;
+}
+.single_product_desc h4 {
+    font-size: 14px;
+    font-weight: bold;
 }
