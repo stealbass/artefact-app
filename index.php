@@ -8,7 +8,7 @@
 require("libs/config.php");
 $page = "Library";
 $pageDetails = $page;
-$desc = "Vente de livres en ligne";
+$desc = "The african comics repository";
 $pageDesc = $desc;
 $key = "Templates, Ventes en ligne, Livres";
 $pageKey = $key;

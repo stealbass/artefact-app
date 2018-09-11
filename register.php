@@ -8,7 +8,7 @@
 require("libs/config.php");
 $page = "Membership";
 $pageDetails = $page;
-$desc = "Vente de templates en ligne";
+$desc = "The african comics repository";
 $pageDesc = $desc;
 $key = "Templates, Ventes en ligne";
 $pageKey = $key;
@@ -34,19 +34,19 @@ if (!empty($_POST['btnLogin'])) {
     $password = trim($_POST['password']);
 
     if ($username == "") {
-        $login_error_message = 'Le pseudo est requis!';
+        $login_error_message = 'Pseudo field required!';
     } else if ($password == "") {
-        $login_error_message = 'Le mot de passe est requis!';
+        $login_error_message = 'Password field required!';
     } else {
         $user_id = $app->Login($username, $password); // check user login
         if($user_id > 0)
         {
             $_SESSION['user_id'] = $user_id; // Set Session
-            header("Location: cart.php"); // Redirect user to the profile.php
+            header("Location: profile.php"); // Redirect user to the profile.php
         }
         else
         {
-            $login_error_message = 'Details invalides!';
+            $login_error_message = 'Invalid details!';
         }
     }
 }
@@ -54,24 +54,26 @@ if (!empty($_POST['btnLogin'])) {
 // check Register request
 if (!empty($_POST['btnRegister'])) {
     if ($_POST['name'] == "") {
-        $register_error_message = 'Le nom est requis!';
+        $register_error_message = 'Name field required!';
     } else if ($_POST['email'] == "") {
-        $register_error_message = 'Email est requis!';
+        $register_error_message = 'Email field required!';
     } else if ($_POST['username'] == "") {
-        $register_error_message = 'Le pseudo est requis!';
+        $register_error_message = 'Pseudo field required!';
     } else if ($_POST['password'] == "") {
-        $register_error_message = 'Le mot de passe est requis!';
+        $register_error_message = 'Password field required';
     } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $register_error_message = 'Email invalide!';
+        $register_error_message = 'Email not valide!';
     } else if ($app->isEmail($_POST['email'])) {
-        $register_error_message = 'Email déjà utulisé!';
+        $register_error_message = 'Email in use';
     } else if ($app->isUsername($_POST['username'])) {
-        $register_error_message = 'Pseudo déjà utulisé!';
+        $register_error_message = 'Pseudo in use!';
+    } else if ($_POST['author'] == "") {
+        $register_error_message = 'Author field required';
     } else {
-        $user_id = $app->Register($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password']);
+        $user_id = $app->Register($_POST['name'], $_POST['email'], $_POST['username'], $_POST['password'], $_POST['author']);
         // set session and redirect user to the profile page
         $_SESSION['user_id'] = $user_id;
-        header("Location: cart.php");
+        header("Location: profile.php");
     }
 }
 include("header.php");

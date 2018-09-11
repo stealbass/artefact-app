@@ -8,13 +8,13 @@ require("libs/config.php");
 require('vote/_drawrating.php');
 require("dbcon.php");
 
-if(isset($_GET['id'], $_GET['cont']))
+if(isset($_GET['id']))
         {	
-$stmt=$db->prepare('select * FROM tbl_produits WHERE prodSlug = :prodSlug AND prodCont = :prodCont');
-								$stmt->execute(array(':prodSlug' => $_GET['id'], ':prodCont' => $_GET['cont']));
+$stmt=$db->prepare('select * FROM tbl_produits WHERE prodSlug = :prodSlug');
+								$stmt->execute(array(':prodSlug' => $_GET['id']));
 
 $row = $stmt->fetch();
-$pageDetails = $row['prodBrand'].' '.$row['prodTitle'].' '.$row['prodCont'];
+$pageDetails = $row['prodBrand'].' '.$row['prodTitle'];
 		}
 $desc = "Vente de livres en ligne";
 $pageDesc = $desc;

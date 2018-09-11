@@ -59,7 +59,7 @@ $obj = $result->fetch();
 					?>
 						<h3>Hi <?php echo htmlentities($user->name) ?>,</h3>
             <p>
-				Welcome to artefact
+				Welcome to artefacts
             </p>
 			
 			<a href="orders.php" class="btn btn-default" style="color: #fff;">My orders</a>

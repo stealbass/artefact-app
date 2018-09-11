@@ -40,6 +40,15 @@
 									<label for="">Password</label>
 									<input type="password" name="password" class="form-control"/>
 								</div>
+                              <div class="form-group">
+                                <label for="">Author</label>
+                                <select name="author">
+                                
+                                <option selected="selected" class="form-control">--Choose--</option>
+                                <option value="1" class="form-control">Yes</option>
+                                <option value="2" class="form-control">No</option>
+                                </select>
+                              </div>
 								<div class="form-group">
 									<input type="submit" name="btnRegister" class="btn btn-block btn-warning" value="Register"/>
 								</div>

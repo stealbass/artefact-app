@@ -85,15 +85,18 @@ $row = $stmt->fetch();
 
 									?>
                                         <tr>
-                                            <td>
+                                            <td width="100">
                                             <?php
 												echo '<img src="admin/'.$obj['Image'].'" class="img img-responsive"/>';
 											?>
                                             </td>
                                             <td>
+                                            <div class="single_product_desc">
 											<?php
-												echo '<h3>'.$obj['Brand'].' '.$obj['Titre'].' '.$obj['Cont'].'</h3>';
+												echo '<h3> '.$obj['Titre'].'</h3>';
+												echo '<h3>Author : <span class="text-muted"> '.$obj['Cont'].'</sapn></h3>';
 											?>
+                                            </div>
                                             </td>
                                         </tr>
 									<?php
@@ -123,7 +126,7 @@ $row = $stmt->fetch();
 									<?php
 									  echo '<tr>';
 									  echo '<th align="right">Total</td>';
-									  echo '<th>'.$row['Total_Amount'].' FCFA</td>';
+									  echo '<th>'.$fgfg.' FCFA</td>';
 									  echo '</tr>';
 									?>
                                     </tfoot>

@@ -23,10 +23,20 @@ if(session_id() == '' || !isset($_SESSION)){
 require("libs/config.php");
 $page = "Cart";
 $pageDetails = $page;
-$desc = "Vente de livres en ligne";
+$desc = "The african comics repository";
 $pageDesc = $desc;
 $key = "Book, Ventes en ligne";
 $pageKey = $key;
+
+// Database connection
+require __DIR__ . '/database.php';
+$db = DB();
+
+// Application library ( with DemoLib class )
+require __DIR__ . '/libs/library.php';
+$app = new DemoLib();
+
+$user = $app->UserDetails($_SESSION['user_id']); // get user details
 
 include("header.php");
     
@@ -94,16 +104,18 @@ foreach ($_SESSION['cart'] as $delivery) {
 
 									?>
                                         <tr>
-                                            <td>
+                                            <td width="100">
                                 
                                             <?php
-												echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><img src="admin/'.$obj['prodImg'].'" class="img img-responsive"/></a>';
+												echo '<a itemprop="url" href="detail.php?id='.$id.'"><img src="admin/'.$obj['prodImg'].'" class="img img-responsive"/></a>';
 											?>
                                             </td>
                                             <td>
+                                            <div class="single_product_desc">
 											<?php
-												echo '<h3>'.$obj['prodBrand'].' '.$obj['prodTitle'].' '.$obj['prodCont'].'</h3>';
+												echo '<h3>'.$obj['prodBrand'].' '.$obj['prodTitle'].'</h3>';
 											?>
+                                            </div>
                                             </td>
                                         </tr>
 									<?php
@@ -117,7 +129,7 @@ foreach ($_SESSION['cart'] as $delivery) {
                                     <tfoot> 
 									<?php
 									  echo '<tr>';
-									  echo '<th>Total</td>';
+									  echo '<th>Total Price</td>';
 									  echo '<th>'.$total.' FCFA</td>';
 									  echo '</tr>';
 									?>

@@ -7,6 +7,14 @@
  * @googleplus 
  */
 require("dbcon.php");
+$pages = new Paginator('4','p');
+
+//collect all records fro the next function
+$stmt=$db->prepare('select tbl_produits.prodID, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodDesc, tbl_produits.prodImg, tbl_produits.qty, tbl_produits.prodPrice, tbl_produits.prodActif, tbl_produits.prodUser, tbl_submain.subcatSlug FROM tbl_produits, tbl_submain WHERE tbl_produits.subcat_id = tbl_submain.subcat_id AND tbl_produits.prodActif = 1 ');
+$stmt->execute(array());
+								
+//determine the total number of records
+$pages->set_total($stmt->rowCount());
 ?>
         <!--  page-wrapper -->
         <div id="page-wrapper">
@@ -24,42 +32,42 @@ require("dbcon.php");
                   <!-- Wrapper for slides -->
                   <div class="carousel-inner">
                                             <?php
-															  $query=$db->query('select * FROM tbl_produits WHERE prodSlug = "agissons-tous-no-3"');
+															  $query=$db->query('select * FROM tbl_produits WHERE prodSlug = "agissons-tous-no-3" AND prodActif = 1 ');
 														$row = $query->fetch();
 												$id=$row['prodSlug'];
 												$sid=$row['prodCont'];
 																?>
                     <div class="item active">
             								<?php
-            										echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><img src="assets/img/book1.jpg" alt="..."></a>';
+            										echo '<a itemprop="url" href="detail.php?id='.$id.'"><img src="assets/img/book1.jpg" alt="..."></a>';
                                             ?>
                       <div class="carousel-caption">
                         <h5>Agissons tous No 3</h5>
                       </div>
                     </div>
                                             <?php
-															  $query=$db->query('select * FROM tbl_produits WHERE prodSlug = "les-nombrilcs-no-1"');
+															  $query=$db->query('select * FROM tbl_produits WHERE prodSlug = "les-nombrilcs-no-1" AND prodActif = 1 ');
 														$row = $query->fetch();
 												$id=$row['prodSlug'];
 												$sid=$row['prodCont'];
 																?>
                     <div class="item">
             								<?php
-            										echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><img src="assets/img/book2.jpg" alt="..."></a>';
+            										echo '<a itemprop="url" href="detail.php?id='.$id.'"><img src="assets/img/book2.jpg" alt="..."></a>';
                                             ?>
                       <div class="carousel-caption">
                         <h5>Les nombrilCs No 1</h5>
                       </div>
                     </div>
                                             <?php
-															  $query=$db->query('select * FROM tbl_produits WHERE prodSlug = "les-voyageurs-du-graal"');
+															  $query=$db->query('select * FROM tbl_produits WHERE prodSlug = "les-voyageurs-du-graal" AND prodActif = 1 ');
 														$row = $query->fetch();
 												$id=$row['prodSlug'];
 												$sid=$row['prodCont'];
 																?>
                     <div class="item">
             								<?php
-            										echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><img src="assets/img/book3.jpg" alt="..."></a>';
+            										echo '<a itemprop="url" href="detail.php?id='.$id.'"><img src="assets/img/book3.jpg" alt="..."></a>';
                                             ?>
                       <div class="carousel-caption">
                         <h5>Les voyageurs du graal</h5>
@@ -79,9 +87,9 @@ require("dbcon.php");
                                 <table class="table table-hover">
                                     <tbody>
                     <?php
-							  $query=$db->prepare('select tbl_produits.prodID, tbl_produits.prodBrand, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodDesc, tbl_produits.prodImg, tbl_produits.prodPrice, tbl_submain.subcatSlug FROM tbl_produits, tbl_submain WHERE tbl_produits.subcat_id = tbl_submain.subcat_id 
+							  $query=$db->prepare('select tbl_produits.prodID, tbl_produits.prodTitle, tbl_produits.prodSlug, tbl_produits.prodCont, tbl_produits.prodDesc, tbl_produits.prodImg, tbl_produits.qty, tbl_produits.prodPrice, tbl_produits.prodActif, tbl_produits.prodUser, tbl_submain.subcatSlug FROM tbl_produits, tbl_submain WHERE tbl_produits.subcat_id = tbl_submain.subcat_id AND tbl_produits.prodActif = 1  
                       ORDER BY 
-                    RAND() LIMIT 6 ');
+                    prodID DESC '.$pages->get_limit());
 								$query->execute(array());
 								?>
 							<?php
@@ -93,21 +101,24 @@ require("dbcon.php");
                                         <tr>
                                             <td width="100">
             								<?php
-            										echo '<a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'"><img itemprop="image" src="admin/'.$row['prodImg'].'" class="img img-responsive" alt="'.$row['prodBrand'].' '.$row['prodTitle'].' '.$row['prodCont'].'"/></a>';
+            										echo '<a itemprop="url" href="detail.php?id='.$id.'"><img itemprop="image" src="admin/'.$row['prodImg'].'" class="img img-responsive" alt="'.$row['prodTitle'].'"/></a>';
                                             ?>
                                             </td width="100">
                                             <td>
                                             <div class="single_product_desc">
             								<?php
-            										echo '<h4 itemprop="name"><a itemprop="url" href="detail.php?id='.$id.'&cont='.$sid.'">'.$row['prodBrand'].'<br/> '.$row['prodTitle'].'<br/> '.$row['prodCont'].'</a></h4>';
+            										echo '<h4 itemprop="name"><a itemprop="url" href="detail.php?id='.$id.'"><br/> '.$row['prodTitle'].'</a></h4>';
                                             ?>
                                             <p class="text-muted"><?php echo $row['subcatSlug'] ?></p>
-                                            <p>By Mandresak</p>
-                                            <button type="button" class="btn btn-danger btn-circle">-18
+                                            <p>By <a href="detailprofil.php?id=<?php echo $row['prodUser'] ?>"><?php echo $row['prodCont'] ?></a></p>
+                                            <button type="button" class="btn btn-danger btn-circle">-<?php echo $row['qty'] ?>
                                             </button>
 															<?php
+                                                            if ($row['prodPrice'] == 0) {
+                                                            echo '<a itemprop="url" href="download.php?filename='.$row['prodPdf'].'" class="btn btn-warning" >Read</a>';
+                                                            } else {
 																echo '<a href="update-cart.php?action=add&id='.$pid.'"><input type="submit" value="'.$row['prodPrice'].' XAF" style="clear:both; background: #ffd400; border: 1px solid #000000; border-radius: 3px; color: #000; font-size: 0.9em; font-weight: 700; padding: 5px; text-transform: uppercase; text-align: center;"/></a>';
-																
+																}
 															?>
                                             </div>                
                                             </td>
@@ -119,6 +130,7 @@ require("dbcon.php");
                             </div>
                     </div>
                     <!-- End  Hover Rows  -->
+						 <?php  echo $pages->page_links(); ?>
                 </div>
             </div>
         </div>

@@ -65,6 +65,7 @@ require("dbcon.php");
     <link href="assets/css/style.css" rel="stylesheet" />
     <link href="assets/css/main-style.css" rel="stylesheet" />
     <link rel="stylesheet" href="assets/css/rating.css">
+    <link rel="stylesheet" type="text/css" href="admin/CLEditor/jquery.cleditor.css" />
     <!-- Page-Level CSS -->
     <link href="assets/plugins/morris/morris-0.4.3.min.css" rel="stylesheet" />
    </head>

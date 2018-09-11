@@ -5,11 +5,11 @@
  * Page : Profile
  */
 require("libs/config.php");
-$page = "Mon Compte";
+$page = "My account";
 $pageDetails = $page;
-$desc = "Laboratoires Biopharma une marque d’excellence dans le domaine de la Beauté en Afrique; LAIT HYDRATANT ( BALNEO FOR MEN & WOMEN, BETTINA, HYDRACARE, LUMINA, PRIMO ), LAIT ECLAIRCISSANT ( BIOPUR PARIS, BIO SUCCESS, GOLDEN CLAIR, RAPID CLAIR, TALANGAI, WHITE EXPRESS ), GAMME BEBE ( MOBY BEBE, KIDOUX, SEPHORA )";
+$desc = "The african comics repository";
 $pageDesc = $desc;
-$key = "Gel de douche, Lait de toilette, Lait hydratant, Lait éclaircissant, Savon bébé, BALNEO FOR MEN & WOMEN, HYDRACARE, PRIMO, MOBY BEBE, KIDOUX, B-LIGHT, BIOPUR PARIS, WHITE EXPRESS, NEOTRYL, TALANGAI, SEPHORA";
+$key = "Book, Ventes en ligne";
 $pageKey = $key;
  
 // Start Session
@@ -19,11 +19,11 @@ session_start();
 require __DIR__ . '/database.php';
 $db = DB();
 
-$result = $db->query('SELECT * FROM users WHERE user_id='.$_SESSION['user_id']);
-							
-	if($result) {
-$obj = $result->fetch();
-$user = $obj[name];
+// Application library ( with DemoLib class )
+require __DIR__ . '/libs/library.php';
+$app = new DemoLib();
+
+$user = $app->UserDetails($_SESSION['user_id']); // get user details
 
 $Modifier_error_message = '';
 
@@ -34,13 +34,24 @@ if(isset($_POST['submit'])){
         $Modifier_error_message = 'Le nom est requis!';
     } else if ($_POST['prenom'] == "") {
         $Modifier_error_message = 'Le prenom est requis!';
-    } else if ($_POST['password'] == "") {
-        $Modifier_error_message = 'Le mot de passe est requis!';
-    } else if ($_POST['repassword'] != $_POST['password']) {
-        $Modifier_error_message = 'Retapez correctement le mot de passe!';
-    } else { 
+    } else if ($_POST['pays'] == "") {
+        $register_error_message = 'Pays est requis!';
+    } else if ($_POST['ville'] == "") {
+        $register_error_message = 'Ville est requis!';
+    } else if (!filter_var($_POST['phone'], FILTER_SANITIZE_NUMBER_INT)) {
+        $register_error_message = 'Le telephone est requis!';
+    } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
+        $register_error_message = 'Email est requis!';
+    } else {
 		$name = filter_var($_POST['name'], FILTER_SANITIZE_STRING);
 		$prenom = filter_var($_POST['prenom'], FILTER_SANITIZE_STRING);
+		$pays = $_POST['pays'];
+		$ville = filter_var($_POST['ville'], FILTER_SANITIZE_STRING);	
+		$phone = $_POST['phone'];
+		$email = $_POST['email'];
+		$user = $_POST['username'];
+		$auth = $_POST['auth'];
+        
 		$password = trim($_POST['password']);
 		$repassword = trim($_POST['repassword']);
         $enc_password = hash('sha256', $repassword);
@@ -49,11 +60,11 @@ if(isset($_POST['submit'])){
                                 $image_size = getimagesize($_FILES['image']['tmp_name']);
 
                                 move_uploaded_file($_FILES["image"]["tmp_name"], "admin/upload/" . $_FILES["image"]["name"]);
-                                $photo = "admin/upload/" . $_FILES["image"]["name"];
+                                $photo = "upload/" . $_FILES["image"]["name"];
 	
-        $smt = "UPDATE users SET name=:name, prenom=:prenom, password=:password, photo=:photo WHERE user_id=".$_SESSION['user_id'];
-		$resultat = $db->prepare($smt);
-		$resultat->execute(array(':name'=>$name,':prenom'=>$prenom,':password'=>$enc_password,':photo'=>$photo));
+        $smt = "UPDATE users SET name=:name, prenom=:prenom, pays=:pays, ville=:ville, phone=:phone, email=:email, username=:user, password=:pass, photo=:photo, author=:auth WHERE user_id=".$_SESSION['user_id'];
+		$qly = $db->prepare($smt);
+		$qly->execute(array(':name'=>$name,':prenom'=>$prenom,':pays'=>$pays,':ville'=>$ville,':phone'=>$phone,':email'=>$email,':user'=>$user,':pass'=>$enc_password,':photo'=>$photo,':auth'=>$auth));
 
 		
 	 header("Location: profile.php");
@@ -66,20 +77,22 @@ include("header.php");
        <div class="col-md-12">
         <div class="">
 		<?php
-$result = $db->query('SELECT * FROM users WHERE user_id='.$_SESSION['user_id']);
-							
-	if($result) {
-$obj = $result->fetch();
-						echo '<img src="'. htmlentities($obj[photo]) .'"  class="pull-right profil" class="img img-responsive"/>';
+							if ($user->photo) {
+						echo '<img src="admin/'. htmlentities($user->photo) .'"  class="pull-right profil" class="img img-responsive" style="width: 100px; height: 100px;"/>';
 					}
 					?>
-						<h3>Hi <?php echo htmlentities($user) ?>,</h3>
+						<h3>Hi <?php echo htmlentities($user->name) ?>,</h3>
             <p>
-				Welcome to artefact
+				Welcome to artefacts
             </p>
 			
-			<a href="orders.php" class="btn btn-default" style="color: #fff;">My orders</a>
-            <a href="update-profile.php"  class="btn btn-default" style="color: #fff;">Edit my details</a>
+			<a href="profile.php" class="btn btn-default" style="color: #fff;">My orders</a>
+					<?php
+
+					  if($user->author == 1){
+						echo '<a href="upload.php"  class="btn btn-default" style="color: #fff;">Upload a book</a>';
+					  }
+					  ?>
             <a href="logout.php"  class="btn btn-default" style="color: #fff;">Logout</a>
         </div>
                     <div class="box">
@@ -92,18 +105,25 @@ $obj = $result->fetch();
 							
 						  <?php  
 
-								echo '<div class="content">
+                                $ip = $_REQUEST['REMOTE_ADDR']; // the IP address to query
+                                $query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip));
+                                if($query && $query['status'] == 'success') {
+                                    
+								echo '
+                                
+										<input type="hidden" name="username" value="'. stripslashes($user->username). '" /><div class="content">
+										<input type="hidden" name="auth" value="'. stripslashes($user->author). '" /><div class="content">
                                 <div class="row">
                                    <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="firstname">Name</label>';
-                                            echo '<input type="text" class="form-control" name="name" id="name" value="'. stripslashes($obj[name]). '">';
+                                            echo '<input type="text" class="form-control" name="name" id="name" value="'. stripslashes($user->name). '">';
                                         echo '</div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="lastname">Surname</label>';
-                                            echo '<input type="text" class="form-control" name="prenom" id="prenom" value="'.stripslashes($obj[prenom]). '">';
+                                            echo '<input type="text" class="form-control" name="prenom" id="prenom" value="'.stripslashes($user->prenom). '">';
                                         echo '</div>
                                     </div>
                                    <div class="col-sm-6">
@@ -115,17 +135,49 @@ $obj = $result->fetch();
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Retype Password</label>';
-                                            echo '<input type="password" class="form-control" name="repassword" id="repassword" value="">';
-                                        echo '</div>
-                                    </div>
+                                            echo '<input type="password" class="form-control" name="repassword" id="repassword" value="">
+                                        </div>
+                                        </div>';
+                                        echo '
                                     <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="country">Country</label>';
+                                            echo '<input type="text" class="form-control" name="pays" id="country" value="'.stripslashes($query[country]). '">';
+                                        echo '</div>
+                                    </div>';
+                                    echo '<div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="city">State</label>
+                                            <input type="text" class="form-control" name="ville" id="city" value="'. stripslashes($query[city]). '">
+                                        </div>
+                                    </div>';
+                                    echo '<div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="phone">Telephone</label>
+                                            <input type="text" class="form-control" name="phone" id="phone" value="'. stripslashes($user->phone). '">
+                                        </div>
+                                    </div>';
+                                    echo '<div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="text" class="form-control" id="email" name="email" value="'.stripslashes($user->email). '">
+                                        </div>
+                                    </div>';
+
+                     
+                                    echo '<div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="">Photo profil dimensions (100 x 100)</label>';
                                             echo '<input type="file" name="image" class="form-control" required>';
                                         echo '</div>
                                     </div>
                                 </div>';
-								}
+                                } else {
+                                        echo '<div class="form-group">
+                                            <label for="email">Check your network we cant locate you</label>
+                                        </div>';
+                                }
+								
 							?>
                             </div>
 

@@ -43,15 +43,15 @@ $userh = $_POST['email'];
 												if($result){
 													
 												$obj = $result->fetch();
-													   $cost = $obj['prodAmount'] * $quantity; //work out the line cost
+													   $cost = $obj['prodPrice'] * $quantity; //work out the line cost
 														$img = $obj['prodImg'];
+														$pdf = $obj['prodPdf'];
 $b = $obj['prodTitle'];		
-$d = $quantity;		
-$brand = $obj['prodBrand'];		
+$d = $quantity;			
 $cont = $obj['prodCont'];												
-$smt = "INSERT INTO tbl_purchase (order_ID,Name,Brand,Titre,Cont,Qty,Cost,Image) VALUES (:a,:usera,:brand,:b,:cont,:d,:cost,:img)";
+$smt = "INSERT INTO tbl_purchase (order_ID,Name,Titre,Cont,Qty,Cost,Image,Pdf) VALUES (:a,:usera,:b,:cont,:d,:cost,:img,:pdf)";
 	$qly = $db->prepare($smt);
-	$qly->execute(array(':a'=>$a,':usera'=>$usera,':brand'=>$brand,':b'=>$b,':cont'=>$cont,':d'=>$d,':cost'=>$cost,':img'=>$img));
+	$qly->execute(array(':a'=>$a,':usera'=>$usera,':b'=>$b,':cont'=>$cont,':d'=>$d,':cost'=>$cost,':img'=>$img,':pdf'=>$pdf));
 
 												}
 											}

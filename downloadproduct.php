@@ -41,8 +41,8 @@ $resultat = $db->prepare('SELECT * FROM tbl_purchase WHERE order_ID = :id');
                 										echo '<h4>'.$obj['Titre'].'</h4>';
                                                 ?>
                                             <p class="text-muted"><?php echo $obj['Cont'] ?></p>
-                                            <p>By Bibi Benzo</p>
-                                            <button type="button" class="btn btn-danger btn-circle">-18
+                                            <p>By <?php echo $row['prodCont'] ?></p>
+                                            <button type="button" class="btn btn-danger btn-circle">-<?php echo $row['qty'] ?>
                                             </button>
                                                                                         <a href="download.php?filename=<?php echo $name; ?>" class="btn btn-warning"><i class="fa fa-download fa-fw"></i></a>
 							                 <p class="text-muted"><div class="sharethis-inline-share-buttons"></div></p>

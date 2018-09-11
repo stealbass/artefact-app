@@ -6,10 +6,10 @@
  */
 
 // database Connection variables
-define('HOST', 'mysql-mysecondwebsitetest.alwaysdata.net'); // Database host name ex. localhost
-define('USER', '162515'); // Database user. ex. root ( if your on local server)
-define('PASSWORD', 'Mapan1409'); // Database user password  (if password is not set for user then keep it empty )
-define('DATABASE', 'mysecondwebsitetest_artefact'); // Database Database name
+define('HOST', 'localhost'); // Database host name ex. localhost
+define('USER', 'root'); // Database user. ex. root ( if your on local server)
+define('PASSWORD', 'root'); // Database user password  (if password is not set for user then keep it empty )
+define('DATABASE', 'artefact'); // Database Database name
 
 function DB()
 {

@@ -18,7 +18,7 @@ if(empty($_SESSION['user_id']))
 require("libs/config.php");
 $page = "Pay your order";
 $pageDetails = $page;
-$desc = "Vente de livres en ligne";
+$desc = "The african comics repository";
 $pageDesc = $desc;
 $key = "Book, Ventes en ligne";
 $pageKey = $key;
@@ -89,7 +89,7 @@ function redirect($url) {
 												if($result){
 													
 												$obj = $result->fetch();
-													   $cost = $obj['prodAmount'] * $quantity; //work out the line cost
+													   $cost = $obj['prodPrice'] * $quantity; //work out the line cost
 														$total = $total + $cost; //add to the total cost
 														$grandtotal = $total + $delivery;
 										?>
@@ -159,6 +159,23 @@ function redirect($url) {
 
                 </div>
                 <!-- /.col-md-9 --> 
+							<?php
+									if(isset($_SESSION['cart']))
+									{
+													$total = 0;
+												foreach($_SESSION['cart'] as $product_id => $quantity) {
+																				
+												$result = $db->prepare('SELECT * FROM tbl_produits WHERE prodID = :product_id');
+												$result->execute(array(':product_id' => $product_id));
+												
+
+												if($result){
+													
+												$obj = $result->fetch();
+													   $cost = $obj['prodPrice'] * $quantity; //work out the line cost
+														$total = $total + $cost; //add to the total cost
+														$grandtotal = $total + $delivery;
+										?>
 				 <div class="col-md-3">
                     <div class="panel panel-default">
 
@@ -186,6 +203,11 @@ function redirect($url) {
 
 
                 </div>
+								<?php
+												}
+											}
+                                            }
+								?>	
                 <!-- /.col-md-3 -->
 		</div>		
 		</div>		

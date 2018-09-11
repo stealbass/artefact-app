@@ -43,7 +43,7 @@ $date = date("d/m/Y");
 
  
 
-$sujet = "Votre commande : $order du $date"; //On définit l'objet qui contient la date.
+$sujet = "Your order : $order du $date"; //On définit l'objet qui contient la date.
 	
 	//=====Déclaration des messages au format texte et au format HTML.
 	$message_txt = "Salut à tous, voici un e-mail envoyé par un script PHP.";
@@ -86,16 +86,16 @@ $sujet = "Votre commande : $order du $date"; //On définit l'objet qui contient 
 				<tr>
 					<td align="left" style="padding: 10px 0 10px 0; display: block;">
 					<div style="color: #ffd400; text-transform: uppercase;">	
-							<h4>Votre bon de commande</h4>
+							<h4>Your order</h4>
 							<hr>
 						</div>	
-					<p><h3>No de commande : <strong>'.$obj['order_ID'].'</strong></h3></p>';
+					<p><h3>No order : <strong>'.$obj['order_ID'].'</strong></h3></p>';
             $msg_body .= '<p><strong>Date</strong>: '.$obj['Date'].'</p>';
-            $msg_body .= '<p><strong>Methode de payement</strong>: '.$obj['Paiement'].'</p>';
-            $msg_body .= '<h3><strong>Montant Total</strong>: <strong>'.$obj['Total_Amount'].'</strong></h3></td>';
+            $msg_body .= '<p><strong>Method of payement</strong>: '.$obj['Paiement'].'</p>';
+            $msg_body .= '<h3><strong>Total amount</strong>: <strong>'.$obj['Total_Amount'].'</strong></h3></td>';
             $msg_body .= '<td align="right" style="padding: 10px 0 10px 0; display: block;">
 					<div style="color: #ffd400; text-transform: uppercase;">	
-							<h4>Informations acheteur</h4>
+							<h4>Informations buyer</h4>
 							<hr>
 						</div>	
 					
@@ -110,9 +110,9 @@ $sujet = "Votre commande : $order du $date"; //On définit l'objet qui contient 
 			$msg_body .= '<table width="100%%" border="1" cellpadding="0" cellspacing="0" align="center" width="100%%" style="padding: 15px 15px 15px 15px; margin-bottom:20px;">
 						  <thead bgcolor="#E8E8E8" border="1" cellpadding="0" cellspacing="0" width="100%%" style="padding: 10px 10px 10px 10px;">
                                         <tr>
-                                            <th colspan="2" align="left">Nom</th>
+                                            <th colspan="2" align="left">Name</th>
                                             <th>Quantité</th>
-                                            <th align="right">Prix</th>
+                                            <th align="right">Download</th>
                                         </tr>
                                     </thead>
                                     <tbody bgcolor="#FFFFFF" border="1" cellpadding="0" cellspacing="0" width="100%%" style="padding: 10px 10px 10px 10px;">';
@@ -123,9 +123,10 @@ $sujet = "Votre commande : $order du $date"; //On définit l'objet qui contient 
 									if($resultas){
 										
 									  while($row = $resultas->fetch()) {
-            $msg_body .= '<tr><td colspan="2" align="left" style="font-size: 15px;">'.$row['Brand'].' '.$row['Titre'].' '.$row['Cont'].'</td>';
+																				    $name = $row['Pdf'];
+            $msg_body .= '<tr><td colspan="2" align="left" style="font-size: 15px;">'.$row['Titre'].' by '.$row['Cont'].'</td>';
             $msg_body .= '<td align="right">'.$row['Qty'].'</td>';
-            $msg_body .= '<td align="right" style="font-size: 15px;">'.$row['Cost'].'</td></tr>';
+            $msg_body .= '<td align="right" style="font-size: 15px;"><a itemprop="url" href="http://mysecondwebsitetest.alwaysdata.net/download.php?filename='.$name.'" class="btn btn-default" >Download</a></td></tr>';
 										  }
 										}
 			$msg_body .= '<tfoot bgcolor="#E8E8E8" border="1" cellpadding="0" cellspacing="0" width="100%%" style="padding: 10px 10px 10px 10px;">';
@@ -279,7 +280,7 @@ $sujet = "Votre commande : $order du $date"; //On définit l'objet qui contient 
     if ( mail($mail_destinataire,$sujet,$message,$header)) 
 		{
 		session_destroy();
-		 header("Location: index.php");
+		 header("Location: register.php");
 		}
 }
 }
