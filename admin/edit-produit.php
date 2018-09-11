@@ -130,6 +130,8 @@ $(document).ready(function()
 
 	?>
 
+    <input type="hidden" name="user" value="<?php echo $row['prodUser']; ?>" />
+
   <div class="control-group">
 
     <label class="control-label" for="inputEmail">Actif</label>
@@ -138,7 +140,7 @@ $(document).ready(function()
 
 	 <input type="radio" class="radio-inline" id="inputEmail" name="actif" required value="1" <?php if ($row['prodActif'] == '1') { echo 'checked'; } ?> />OUI
 
-    <input type="radio" class="radio-inline" id="inputEmail" name="actif" required value="2" <?php if ($row['prodActif'] == '2') { echo 'checked'; } ?> />NON
+    <input type="radio" class="radio-inline" id="inputEmail" name="actif" required value="0" <?php if ($row['prodActif'] == '0') { echo 'checked'; } ?> />NON
 
     </div>
 
@@ -162,11 +164,11 @@ $(document).ready(function()
 
   <div class="control-group">
   
-    <label class="control-label" for="inputEmail">Genre</label>
+    <label class="control-label" for="inputEmail">Author</label>
 
     <div class="controls">
 
-      <input value="<?php echo $row['prodCont']; ?>" type="text" id="inputEmail" name="contenance" placeholder="genre" required class="span3">
+      <input value="<?php echo $row['prodCont']; ?>" type="text" id="inputEmail" name="contenance" placeholder="author" required class="span3">
 
     </div>
 
@@ -186,7 +188,7 @@ $(document).ready(function()
 
   <div class="control-group">
 
-    <label class="control-label" for="inputEmail" >Quantity</label>
+    <label class="control-label" for="inputEmail" >Audience</label>
 
     <div class="controls">
 
@@ -209,44 +211,83 @@ $(document).ready(function()
   </div>
 
   
+<div class="form-group">
 
-    <div class="control-group">
 
+                                    <label for="input01">Category</label>
 <select name="country" class="country">
 
+<option selected="selected" class="form-control">--Select menu--</option>
 
+<?php
 
-<option selected="selected"><?php echo $row['cat_id']; ?></option>
+	$stmt = $conn->prepare("SELECT * FROM tbl_main");
 
+	$stmt->execute();
 
+	while($drow=$stmt->fetch(PDO::FETCH_ASSOC))
+
+	{
+
+		?>
+
+        <option value="<?php echo $drow['cat_id']; ?>" class="form-control"><?php echo $drow['cat_name']; ?></option>
+
+        <?php
+
+	} 
+
+?>
 
 </select>
 
 
 
+                                    <label for="input01">Sub category</label>
 <select name="state" class="state">
 
-<option selected="selected"><?php echo $row['subcat_id']; ?></option>
+<option selected="selected" class="form-control">--Select Sub--</option>
 
 </select>
+
 
 
 
 </div>
+  <div class="form-group">
 
-	<img src="<?php echo $row['prodImg']; ?>"  width="180"/>
+                                    <label for="input01">Couverture:</label>
 
-	<div class="control-group">
 
-      <label class="control-label" for="input01">Photo:</label>
+    <input type="file" name="image" value="<?php echo $row['prodImg']; ?>" />
 
-     <div class="controls">
 
-     <input type="file" name="image" required class="font"> 
+                                </div>
+<img src="<?php echo $row['prodImg']; ?>"  width="180"/>
 
-      </div>
+  <div class="form-group">
 
-      </div>
+                                    <label for="input01">Fichier pdf:</label>
+
+
+    <input type="file" name="pdf" value="<?php echo $row['prodPdf']; ?>" />
+
+
+                                </div>
+                                <object
+  data="<?php echo $row['prodPdf']; ?>"
+  type="application/pdf"
+  width="50%"
+  height="100%">
+  <iframe
+    src="<?php echo $row['prodPdf']; ?>"
+    width="50%"
+    height="100%"
+    style="border: none;">
+    <p>Your browser does not support PDFs.
+      <a href="<?php echo $row['prodPdf']; ?>">Download the PDF</a>.</p>
+  </iframe>
+</object>
 
 </div>
 
@@ -277,6 +318,8 @@ $(document).ready(function()
 		<?php
 
 	if (isset($_POST['edit'])){
+
+		$user = $_POST['user'];
 
 		$id = $_POST['id'];
 
@@ -310,13 +353,25 @@ $(document).ready(function()
                                 move_uploaded_file($_FILES["image"]["tmp_name"], "upload/" . $_FILES["image"]["name"]);
 
                                 $photo = "upload/" . $_FILES["image"]["name"];
+                                
+		$pdf = addslashes(file_get_contents($_FILES['pdf']['tmp_name']));
+
+                                $pdf_name = addslashes($_FILES['pdf']['name']);
+
+                                $pdf_size = getimagesize($_FILES['pdf']['tmp_name']);
+
+
+
+                                move_uploaded_file($_FILES["pdf"]["tmp_name"], "admin/upload/" . $_FILES["pdf"]["name"]);
+
+                                $Pdf = "upload/" . $_FILES["pdf"]["name"];
 
 
 
 			try {
 	
 
-	$query = $conn->query("update tbl_produits set cat_id = '$cat', subcat_id = '$subcat', prodTitle = '$title', prodCont = '$Contenance', prodSlug = '$prodSlug', prodDesc = '$content', qty = '$quantity', prodPrice = '$price', prodImg='$photo', prodActif = '$actif' where prodID = '$id' ");
+	$query = $conn->query("update tbl_produits set cat_id = '$cat', subcat_id = '$subcat', prodTitle = '$title', prodCont = '$Contenance', prodSlug = '$prodSlug', prodDesc = '$content', qty = '$quantity', prodPrice = '$price', prodImg='$photo', prodActif = '$actif', prodUser = '$user', prodPdf = '$Pdf' where prodID = '$id' ");
 
 			
 	//redirect to index page

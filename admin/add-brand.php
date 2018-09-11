@@ -126,7 +126,7 @@ $(document).ready(function()
 
   <div class="control-group">
 
-    <label class="control-label" for="inputEmail">Brand</label>
+    <label class="form-control" for="inputEmail">Brand</label>
 
     <div class="controls">
 

@@ -42,7 +42,7 @@ require("libs/config.php");
 
   <div class="control-group">
 
-    <label class="control-label" for="inputEmail">Title</label>
+    <label class="form-control" for="inputEmail">Title</label>
 
     <div class="controls">
 
@@ -54,7 +54,7 @@ require("libs/config.php");
 
   <div class="control-group">
 
-    <label class="control-label" for="inputPassword">Bref</label>
+    <label class="form-control" for="inputPassword">Bref</label>
 
     <div class="controls">
 
@@ -64,7 +64,7 @@ require("libs/config.php");
   
   <div class="control-group">
 
-    <label class="control-label" for="inputPassword">Content</label>
+    <label class="form-control" for="inputPassword">Content</label>
 
     <div class="controls">
 
@@ -75,7 +75,7 @@ require("libs/config.php");
   
   <div class="control-group">
 
-    <label class="control-label" for="inputEmail">Visage et corps</label>
+    <label class="form-control" for="inputEmail">Visage et corps</label>
 
     <div class="controls">
 
@@ -89,7 +89,7 @@ require("libs/config.php");
 
   <div class="control-group">
 
-    <label class="control-label" for="inputEmail">Bebe</label>
+    <label class="form-control" for="inputEmail">Bebe</label>
 
     <div class="controls">
 
@@ -103,7 +103,7 @@ require("libs/config.php");
 
   <div class="control-group">
 
-                                    <label class="control-label" for="input01">Image:</label>
+                                    <label class="form-control" for="input01">Image:</label>
 
                                     <div class="controls">
 

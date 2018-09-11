@@ -125,7 +125,7 @@
     
   <li><a href="add_menu.php">Menu</a></li>  <li class="divider-vertical"></li>
   
-  <li><a href="users.php">Users</a></li>  <li class="divider-vertical"></li>
+  <li><a href="users.php">Members</a></li>  <li class="divider-vertical"></li>
 
   <li><a href="admin.php">Admin</a></li>  <li class="divider-vertical"></li>
 

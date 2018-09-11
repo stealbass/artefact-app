@@ -14,6 +14,6 @@ $query = $pdo->prepare("delete  from users where user_id='$id'");
 
 			$query->execute();
 
-header('location:admin.php');
+header('location:home.php');
 
 ?>

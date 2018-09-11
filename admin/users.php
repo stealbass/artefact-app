@@ -31,88 +31,114 @@
 	
 
 
+	  
+
+
+
+
 
 <div class="alert alert-success">
-
-<h4>Admin List</h4>
-
+<h4>Member list</h4>
 	  </div>
 
-<legend></legend>
+                    <div style="margin-top: -19px; margin-bottom: 21px;">
 
- <table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="example">
+                    </div>
+<table width="100%" class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>Photo</th>
+                                            <th>Name</th>
+                                            <th>Surname</th>
+                                            <th>Country</th>
+                                            <th>State</th>
+                                            <th>Telephone</th>
+                                            <th>Email</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
 
+  <?php
 
+  $query = $pdo->prepare("select * from users ORDER BY user_id ASC");
 
+			$query->execute();
 
-
-  <caption></caption>
-
-  <thead>
-
-    <tr>
-
-      <th>Photo</th>
-
-      <th width="80">Full Name</th>
-
-      <th>Email</th>
-
-      <th width="180">Action</th>
-
-    </tr>
-
-	
-
-  </thead>
-
-  <tbody>
-
-    <?php
-
-    $query = $pdo->prepare("select * from users");
-
-	$query->execute();
-
-	while($row = $query->fetch()){
+			while($row = $query->fetch()){
 
 	$id=$row['user_id'];
-	
 
 
-	
+
+	?>
+                                        <tr>
+      <td width="100"><img class="img-rounded" src="<?php echo htmlentities($row['photo']); ?>" width="100"></td>
+                                            <td>
+                                            <?php
+												echo $row['name'];
+											?>
+                                            </td>
+                                            <td>
+                                            <?php
+												echo $row['prenom'];
+											?>
+                                            </td>
+                                            <td>
+                                            <?php
+												echo $row['pays'];
+											?>
+											</td>
+                                            <td>
+                                            <?php
+												echo $row['ville'];
+											?>
+                                            </td>
+                                            <td>
+                                            <?php
+												echo $row['phone'];
+											?>
+											</td>
+                                            <td>
+                                            <?php
+												echo $row['email'];
+											?>
+											</td>
+                                    <td witdh = "30%">
+
+										<a data-toggle="modal" href="#delete<?php echo $id; ?>" class="btn btn-danger">  <i class="icon-trash icon-large"></i>&nbsp;Effacez</a>
+               &nbsp;
+
+                                        <a class="btn btn-warning" href="previewclient.php?id=<?php  echo $id;?>">
+
+                                            <span><i class="icon-pencil icon-large"></i> View</span>
+
+                                        </a>
+                                    </td>
+	<?php 
+
+	include('modal_delete_user.php');
 
 	?>
 
-    <tr>
-
-      <td width="100"><img class="img-rounded" src="<?php echo htmlentities($row['photo']); ?>" width="100"></td>
-
-      <td><?php echo $row['name'];?> <?php echo $row['prenom'];?></td>
-
-      <td><?php echo $row['email'];?></td>
-
-
-<?php include('modal_edit_admin.php');?>
-     	<td> <a href="#delete<?php echo $id; ?>" a data-toggle="modal" class="btn btn-danger">  <i class="icon-trash"></i>&nbsp; Delete</a>
-
-<?php include('modal_delete_users.php');?>
-
-	</td>
 	
 
-    </tr>
+	
 
-	<?php } ?> 
+	  <?php } 
 
-  </tbody> 
+	  
 
-</table>	  
+?>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
 
+                    <a href="" onclick="window.print()" class="btn btn-primary"><i class="icon-print icon-large"></i> Print</a>
 
 
-
+        <!-- /.row -->
 
 
 	  </div>

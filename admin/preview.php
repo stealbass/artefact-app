@@ -1,50 +1,104 @@
 <?php
 
- include('dbcon.php');
+include_once 'dbconfig.php';
+
+
 
  require("libs/config.php");
 
  include("header.php");
 
-
-
-if(isset($_GET['id']))
-
-        {
-
-$stmt = $pdo->prepare('SELECT * FROM tbl_payment WHERE order_ID = :invoice');
-
-$stmt->execute(array(':invoice' => $_GET['id']));
-
-$row = $stmt->fetch();
-
-	
-
-if(isset($_POST['edit'])){
-
-$status = $_POST['country'];
-
-	
-
-$result = $pdo->prepare("UPDATE tbl_payment SET Status='$status' WHERE order_ID = :invoice");
-
-$result->execute(array(':invoice' => $_GET['id']));
-
-	 header("Location: preview.php?id=" .$row['order_ID']);
-
-}
-
 ?>
 
 
 
-        <div class="container">
+<script type="text/javascript">
 
-  
+$(document).ready(function()
 
- <div class="row-fluid">
+{
 
-  <div class="span12">
+	$(".country").change(function()
+
+	{
+
+		var id=$(this).val();
+
+		var dataString = 'id='+ id;
+
+	
+
+		$.ajax
+
+		({
+
+			type: "POST",
+
+			url: "get_state.php",
+
+			data: dataString,
+
+			cache: false,
+
+			success: function(html)
+
+			{
+
+				$(".state").html(html);
+
+			} 
+
+		});
+
+	});
+
+	
+
+	
+
+	$(".state").change(function()
+
+	{
+
+		var id=$(this).val();
+
+		var dataString = 'id='+ id;
+
+	
+
+		$.ajax
+
+		({
+
+			type: "POST",
+
+			url: "get_city.php",
+
+			data: dataString,
+
+			cache: false,
+
+			success: function(html)
+
+			{
+
+				$(".city").html(html);
+
+			} 
+
+		});
+
+	});
+
+	
+
+});
+
+</script>
+
+
+
+ <div class="container">
 
 
 
@@ -54,383 +108,200 @@ $result->execute(array(':invoice' => $_GET['id']));
 
 	 <div class="span9">
 
-	
-
 <div class="alert alert-success">
 
-<h4>Bon de commande: #<?php echo $row['order_ID']; ?> Le <?php echo date('d-m-Y H:i:s', strtotime($row['Date'])) ; ?></h4>
+<h4>Edit Product</h4>
 
 	  </div>
+
+<div>
 
 <legend></legend>
 
-				
+<form class="" method="POST" enctype="multipart/form-data">
 
-                <div class="container">
+  <?php 
 
 
 
-                    <div class="span9">
+	$res = $conn->query("SELECT * FROM tbl_produits WHERE prodID = ".$_GET['id']);
 
-					<div class="span6 ">
+			$row = $res->fetch();
 
-					<div  class="well">
+	?>
 
+    <input type="hidden" name="user" value="<?php echo $row['prodUser']; ?>" />
 
+  <div class="control-group">
 
-                        <h4><i class="fa fa-sign-in"></i> Details de la facture</h4>
+    <label class="control-label" for="inputEmail">Actif</label>
 
-						<hr>
+    <div class="controls">
 
-                            <?php
+	 <input type="radio" class="radio-inline" id="inputEmail" name="actif" required value="1" <?php if ($row['prodActif'] == '1') { echo 'checked'; } ?> />OUI
 
-								echo '<h5>Commande : <strong><i class="fa fa-hashtag" aria-hidden="true"></i> '.$row['order_ID'].'</strong></h5>';
+    <input type="radio" class="radio-inline" id="inputEmail" name="actif" required value="0" <?php if ($row['prodActif'] == '0') { echo 'checked'; } ?> />NON
 
-							?>
+    </div>
 
-                            <?php
+  </div>
+  
 
-								echo '<h5>Date :<strong> '.$row['Date'].'</strong></h5>';
+    <div class="control-group">
+    
+    <label class="control-label" for="inputEmail">Title</label>
 
-							?>
+    <div class="controls">
 
-                            <?php
+    <input name="id" value="<?php echo $row['prodID']; ?>" type="hidden" id="inputEmail" placeholder="ID">
 
-								echo '<h5>Methode de payement :<strong> '.$row['Paiement'].'</strong></h5>';
+    <input name="title" value="<?php echo $row['prodTitle']; ?>" type="text" id="inputEmail" placeholder="Blog Title">
 
-							?>
+    </div>
 
-					</div>		
+    </div>
 
-					</div>	
 
-					<div class="span6">
+  <div class="control-group">
+  
+    <label class="control-label" for="inputEmail">Author</label>
 
-						<form method="POST" action="edit-preview.php">
+    <div class="controls">
 
-					<div class="well">
+      <input value="<?php echo $row['prodCont']; ?>" type="text" id="inputEmail" name="contenance" placeholder="author" required class="span3">
 
-					<div class="bocus">
+    </div>
 
-                                        <a class="btn btn-success" href="edit-preview.php?id=<?php echo $row['order_ID']; ?>">
+  </div>
 
-                                            <span><i class="icon-pencil icon-large"></i> Editez</span>
+    <div class="control-group">
 
-                                        </a>
+    <label class="control-label" for="inputPassword">Content:</label>
 
-                        <h4><i class="fa fa-sign-in"></i> Informations acheteur</h4>
+    <div class="controls">
 
-					</div>		
+	<textarea rows="7" class="span8" placeholder="Write your blogs here..!" name="content" ><?php echo $row['prodDesc']; ?></textarea>  
 
-						<hr>
+    </div>
 
-                                        <ul>
+    </div>
 
-                                            <li><strong>Nom :</strong>
+  <div class="control-group">
 
-                                            <?php
+    <label class="control-label" for="inputEmail" >Audience</label>
 
-												echo $row['Name'];
+    <div class="controls">
 
-											?>
+      <input type="number"  id="inputEmail" name="quantity" value="<?php echo $row['qty']; ?>" required class="span3">
 
-                                            </li>
+    </div>
 
-                                            <li><strong>Prenom :</strong>
+  </div>
 
-                                            <?php
+  <div class="control-group">
 
-												echo $row['Prenom'];
+    <label class="control-label" for="inputEmail">Price</label>
 
-											?>
+    <div class="controls">
 
-                                            </li>
+      <input type="number" id="inputEmail" name="price" value="<?php echo $row['prodPrice']; ?>" required class="span3">
 
-                                            <li><strong>Pays :</strong>
+    </div>
 
-                                            <?php
+  </div>
 
-												echo $row['Country'];
+  
 
-											?>
+   <div class="form-group">
 
-											</li>
 
-                                            <li><strong>Province :</strong>
+                                    <label for="input01">Category</label>
+<select name="country" class="country">
 
-                                            <?php
+<option selected="selected" class="form-control">--Select menu--</option>
 
-												echo $row['Province'];
+<?php
 
-											?>
+	$stmt = $conn->prepare("SELECT * FROM tbl_main");
 
-											</li>
+	$stmt->execute();
 
-                                            <li><strong>Ville :</strong>
+	while($drow=$stmt->fetch(PDO::FETCH_ASSOC))
 
-                                            <?php
+	{
 
-												echo $row['City'];
+		?>
 
-											?>
+        <option value="<?php echo $drow['cat_id']; ?>" class="form-control"><?php echo $drow['cat_name']; ?></option>
 
-                                            </li>
+        <?php
 
-                                            <li><strong>Quartier :</strong>
+	} 
 
-                                            <?php
+?>
 
-												echo $row['State'];
+</select>
 
-											?>
 
-											</li>
 
-                                            <li><strong>Telephone :</strong>
+                                    <label for="input01">Sub category</label>
+<select name="state" class="state">
 
-                                            <?php
+<option selected="selected" class="form-control">--Select Sub--</option>
 
-												echo $row['Phone'];
+</select>
 
-											?>
 
-											</li>
 
-                                            <li><strong>Email :</strong>
 
-                                            <?php
+</div>
+  <div class="form-group">
 
-												echo $row['Email'];
+                                    <label for="input01">Couverture:</label>
 
-											?>
 
-											</li>
+    <input type="hidden" name="image" value="<?php echo $row['prodImg']; ?>" />
 
-                                        </ul>
 
-					</div>	
+                                </div>
+<img src="<?php echo $row['prodImg']; ?>"  width="180"/>
 
-						</form>	
+  <div class="form-group">
 
-					</div>	
+                                    <label for="input01">Fichier pdf:</label>
 
-						
 
-						<input type="hidden" name="code" value = "<?php echo $row['order_ID']; ?>" />	
+    <input type="hidden" name="pdf" value="<?php echo $row['prodPdf']; ?>" />
 
-						<div class="table-responsive">
 
-                                <table class="table table-striped table-bordered table-hover">
+                                </div>
+                                <object
+  data="<?php echo $row['prodPdf']; ?>"
+  type="application/pdf"
+  width="50%"
+  height="100%">
+  <iframe
+    src="<?php echo $row['prodPdf']; ?>"
+    width="50%"
+    height="100%"
+    style="border: none;">
+    <p>Your browser does not support PDFs.
+      <a href="<?php echo $row['prodPdf']; ?>">Download the PDF</a>.</p>
+  </iframe>
+</object>
 
-                                    <thead>
 
-                                        <tr>
+</div>
 
-                                            <th>Produit(s)</th>
+  
 
-                                            <th colspan="2">Nom</th>
+	<button name="edit" type="submit" class="btn btn-large btn-success"><i class="icon-save"></i>&nbsp;Save</button>
 
-                                            <th>Quantité</th>
+    </form>  
 
-                                            <th>Prix</th>
 
-                                        </tr>
 
-                                    </thead>
-
-                                    <tbody>
-
-									<?php
-
-																	
-
-									$result = $pdo->prepare('SELECT * FROM tbl_purchase WHERE order_ID = :order_ID');
-
-									$result->execute(array(':order_ID' => $row['order_ID']));
-
-									
-
-
-
-									if($result){
-
-										
-
-									  while($obj = $result->fetch()) {
-
-
-
-									?>
-
-                                        <tr>
-
-                                            <td width="10%">
-
-                                            <?php
-
-												echo '<img src="'.$obj['Image'].'" class="img img-responsive"/>';
-
-											?>
-
-                                            </td>
-
-                                            <td>
-
-											<?php
-
-												echo '<h3>'.$obj['Brand'].' '.$obj['Titre'].' '.$obj['Cont'].'</h3>';
-
-											?>
-
-                                            </td>
-
-                                            <td>
-
-                                            <?php    
-
-												echo '<td>'.$obj['Qty'].'</td>';
-
-                                            ?>
-
-											</td>
-
-                                            <td>
-
-                                            <?php    
-
-												echo $obj['Cost'];
-
-											?></td>
-
-                                        </tr>
-
-									<?php
-
-										  }
-
-										}
-
-									?>
-
-
-
-                                        
-
-                                    <tfoot> 
-
-									<?php
-
-									$resultas = $pdo->prepare("SELECT sum(Cost) FROM tbl_purchase WHERE order_ID = :order_ID");
-
-									$resultas->execute(array(':order_ID' => $row['order_ID']));
-
-									for($i=0; $rowas = $resultas->fetch(); $i++){
-
-										$fgfg=$rowas['sum(Cost)'];
-
-									}
-
-									  echo '<tr>';
-
-									  echo '<th colspan="4" align="right">Sous Total</td>';
-
-									  echo '<th>'.$fgfg.'</td>';
-
-									  echo '</tr>';
-
-									?>
-
-									<?php
-
-									  echo '<tr>';
-
-									  echo '<th colspan="4" align="right">Frais De Livraison</td>';
-
-									  echo '<th>'.$row['Delivery'].'</td>';
-
-									  echo '</tr>';
-
-									?>
-
-									<?php
-
-									  echo '<tr>';
-
-									  echo '<th colspan="4" align="right">Total</td>';
-
-									  echo '<th>'.$row['Total_Amount'].'</td>';
-
-									  echo '</tr>';
-
-									?>
-
-                                    </tfoot>
-
-                                    </tbody>
-
-                                </table>
-
-					<div  class="well">
-
-						<form method="POST" action="">
-
-							<div class="control-group">
-
-							  <h4>Statut</h4>
-
-							 <div class="controls">
-
-							<select name="country" class="country">
-
-							<option selected="selected"><?php echo $row['Status']; ?></option>
-
-											  <option value="En Attente">En Attente</option>
-
-											  <option value="Payé">Payé</option>
-
-											  <option value="Delivré">Delivré</option>
-
-											  <option value="Annulé">Annulé</option>
-
-							</select>
-
-							<h4><button name="edit" type="submit" class="btn btn-success"><i class="icon-save"></i> &nbsp;Ok</button></h4>
-
-							</div>	
-
-							</div>	
-
-							</form>  
-
-					</div>	
-
-
-
-                            </div>
-
-                            
-
-                        </form>
-
-                    </div>
-
-                    <!-- /.box -->
-
-
-
-
-
-                </div>
-
-                <!-- /.col-md-9 --> 
-
-	  </div>
-
-	  <?php
-
-	  include('session_sidebar.php');
-
-	  ?>
+</div>
 
 	<div style="margin-bottom: 21px;" class="pull-right">
 
@@ -438,22 +309,69 @@ $result->execute(array(':invoice' => $_GET['id']));
 
                 </div>
 
-    </div>
-
-    </div>
-
- 
+<br />
 
 </div>
 
-  </div>
+</div>
 
-		</div>	
+</div>
 
-<?php
+		<?php
 
-  }
+	if (isset($_POST['edit'])){
 
-include("footer.php");
+		$user = $_POST['user'];
 
-?>
+		$id = $_POST['id'];
+
+		$cat = $_POST['country'];
+
+		$subcat = $_POST['state'];
+
+		$title=$_POST['title'];
+
+		$prodSlug = slug($title);	
+
+		$Contenance = $_POST['contenance'];
+
+		$content = addslashes ($_POST['content']);
+
+		$quantity = $_POST['quantity'];
+
+		$price = $_POST['price'];
+
+		$actif = $_POST['actif'];
+		
+        $photo = $_POST['image'];
+		
+        $Pdf = $_POST['pdf'];
+		
+
+
+
+			try {
+	
+
+	$query = $conn->query("update tbl_produits set cat_id = '$cat', subcat_id = '$subcat', prodTitle = '$title', prodCont = '$Contenance', prodSlug = '$prodSlug', prodDesc = '$content', qty = '$quantity', prodPrice = '$price', prodImg='$photo', prodActif = '$actif', prodUser = '$user', prodPdf = '$Pdf' where prodID = '$id' ");
+
+			
+	//redirect to index page
+				header('Location: home.php');
+				exit;
+
+			} catch(PDOException $e) {
+			    echo $e->getMessage();
+			}
+
+	
+
+	
+
+	}
+
+	
+
+ include("footer.php");
+
+	?>

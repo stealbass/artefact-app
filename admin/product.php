@@ -34,7 +34,7 @@
 
 <div class="alert alert-success">
 
-<h4>Products</h4>
+<h4>All products posted by administrator and members</h4>
 
 	  </div>
 
@@ -55,11 +55,11 @@
 
       <th>Description</th>
 
-      <th>Genre</th>
+      <th width="80">Author</th>
 
-      <th width="80">Total Price</th>
+      <th width="80">Price</th>
 
-      <th>Photo</th>
+      <th>Cover</th>
 
       <th width="180">Action</th>
 
@@ -73,7 +73,7 @@
 
   <?php
 
-  $query = $pdo->prepare("select * from tbl_produits ORDER BY prodID ");
+  $query = $pdo->prepare("select * from tbl_produits ORDER BY prodID ASC");
 
 			$query->execute();
 
